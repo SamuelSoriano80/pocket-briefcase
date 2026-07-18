@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import engine, Base
 from app.routes import auth as auth_routes
-# from app.routes import case as case_routes
+from app.routes import case as case_routes
 
 
 Base.metadata.create_all(bind=engine)
@@ -28,4 +28,4 @@ def read_root():
 
 
 app.include_router(auth_routes.router, prefix="/auth", tags=["auth"])
-# app.include_router(case_routes.router, prefix="/cases", tags=["cases"])
+app.include_router(case_routes.router, prefix="/cases", tags=["cases"])
