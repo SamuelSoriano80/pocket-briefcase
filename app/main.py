@@ -4,13 +4,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
 from app.routes import auth as auth_routes
 from app.routes import case as case_routes
+from app.routes import evidence as evidence_routes
+from app.routes import person as person_routes
+from app.routes import case_people as case_people_routes
 
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Pocket Briefcase API")
 
-# Allows React (running on another port) to make requests to the API
+# Middleware to allow React to make requests to the API
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -29,3 +32,6 @@ def read_root():
 
 app.include_router(auth_routes.router, prefix="/auth", tags=["auth"])
 app.include_router(case_routes.router, prefix="/cases", tags=["cases"])
+app.include_router(evidence_routes.router, prefix="/evidence", tags=["evidence"])
+app.include_router(person_routes.router, prefix="/people", tags=["people"])
+app.include_router(case_people_routes.router, prefix="/case-people", tags=["case-people"])

@@ -9,6 +9,7 @@ from app.models.user import User
 
 router = APIRouter()
 
+
 @router.post("/")
 def create_case(
     case: CaseCreate,
@@ -43,16 +44,20 @@ def create_case(
 
     return new_case
 
+
 @router.get("/")
 def get_cases(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
     return db.query(Case).all()
+
 
 @router.get("/{case_id}")
 def get_case(
     case_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
 
     case = db.query(Case).filter(
@@ -67,11 +72,13 @@ def get_case(
 
     return case
 
+
 @router.put("/{case_id}")
 def update_case(
     case_id: int,
     updated: CaseUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
 
     case = db.query(Case).filter(
@@ -94,10 +101,12 @@ def update_case(
 
     return case
 
+
 @router.delete("/{case_id}")
 def delete_case(
     case_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
 
     case = db.query(Case).filter(
