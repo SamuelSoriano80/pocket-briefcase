@@ -23,3 +23,19 @@ export async function updateCase(id, caseData) {
 export async function deleteCase(id) {
     await api.delete(`/cases/${id}`);
 }
+
+export async function getCasePeople(caseId) {
+
+    const response = await api.get(`/case_people/case/${caseId}`);
+
+    return response.data;
+
+}
+
+export async function getCaseEvidence(caseId) {
+
+    const response = await api.get(`/evidence/case/${caseId}`);
+
+    return response.data;
+
+}

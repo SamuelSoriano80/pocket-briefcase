@@ -1,6 +1,320 @@
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #f4f4f4;
+:root {
+
+    --primary: #1f4e79;
+    --primary-dark: #173b5c;
+    --secondary: #f5f7fa;
+
+    --background: #eef2f6;
+    --surface: #ffffff;
+
+    --border: #d6dce5;
+
+    --text: #1e293b;
+    --text-light: #64748b;
+
+    --success: #2e7d32;
+    --danger: #c62828;
+
+    --radius: 8px;
+
+    --shadow:
+        0 2px 8px rgba(0, 0, 0, .08);
+
 }
+
+/* ===========================
+   Global
+=========================== */
+
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+body {
+
+    font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+    background: var(--background);
+
+    color: var(--text);
+
+}
+
+a {
+
+    color: inherit;
+
+    text-decoration: none;
+
+}
+
+button {
+
+    cursor: pointer;
+
+}
+
+/* ===========================
+   Shared Containers
+=========================== */
+
+.page {
+
+    padding: 30px;
+
+}
+
+.page-title {
+
+    margin-bottom: 25px;
+
+    font-size: 30px;
+
+    font-weight: 600;
+
+}
+
+.card {
+
+    background: white;
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow);
+
+    padding: 24px;
+
+}
+
+/* ===========================
+   Forms
+=========================== */
+
+form {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+
+}
+
+label {
+
+    font-weight: 600;
+
+}
+
+input,
+textarea {
+
+    width: 100%;
+
+    padding: 10px;
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    font-size: 15px;
+
+}
+
+textarea {
+
+    resize: vertical;
+
+    min-height: 120px;
+
+}
+
+/* ===========================
+   Buttons
+=========================== */
+
+button {
+
+    background: var(--primary);
+
+    color: white;
+
+    border: none;
+
+    border-radius: var(--radius);
+
+    padding: 10px 18px;
+
+    font-size: 15px;
+
+    transition: .2s;
+
+}
+
+button:hover {
+
+    background: var(--primary-dark);
+
+}
+
+/* ===========================
+   Tables
+=========================== */
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: white;
+
+    box-shadow: var(--shadow);
+
+}
+
+th {
+
+    background: var(--primary);
+
+    color: white;
+
+    text-align: left;
+
+    padding: 14px;
+
+}
+
+td {
+
+    padding: 14px;
+
+    border-bottom: 1px solid var(--border);
+
+}
+
+tr:hover {
+
+    background: #f6f8fb;
+
+}
+
+/* ===========================
+   Layout
+=========================== */
+
+.layout {
+
+    min-height: 100vh;
+
+}
+
+.header {
+
+    height: 70px;
+
+    background: white;
+
+    border-bottom: 1px solid var(--border);
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 0 30px;
+
+    box-shadow: var(--shadow);
+
+}
+
+.logo {
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    color: var(--primary);
+
+}
+
+.header-right {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+}
+
+.layout-body {
+
+    display: flex;
+
+}
+
+.sidebar {
+
+    width: 220px;
+
+    background: white;
+
+    border-right: 1px solid var(--border);
+
+    min-height: calc(100vh - 70px);
+
+    padding: 20px;
+
+}
+
+.nav-link {
+
+    display: block;
+
+    padding: 12px;
+
+    border-radius: var(--radius);
+
+    margin-bottom: 10px;
+
+    transition: .2s;
+
+}
+
+.nav-link:hover {
+
+    background: var(--secondary);
+
+}
+
+.active {
+
+    background: var(--primary);
+
+    color: white;
+
+}
+
+.content {
+
+    flex: 1;
+
+    padding: 30px;
+
+}
+
+/* 
+    If you edit anything in this file, please make sure that every other page in the application is still looking good.
+    This file is used globally across the entire application, so any changes here will affect all pages. 
+*/

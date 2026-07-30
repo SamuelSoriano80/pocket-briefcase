@@ -1,80 +1,294 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { useParams } from "react-router-dom";
+import {
+    getCase,
+    getCasePeople,
+    getCaseEvidence
+} from "../services/caseService";
 
-import { getCase } from "../services/caseService";
+import Layout from "../components/layout/Layout";
 
 function CaseDetails() {
 
     const { id } = useParams();
 
+    const navigate = useNavigate();
+
     const [myCase, setMyCase] = useState(null);
+
+    const [people, setPeople] = useState([]);
+    
+    const [evidence, setEvidence] = useState([]);
 
     useEffect(() => {
 
-        async function loadCase() {
+        async function loadCaseData() {
 
-            const data = await getCase(id);
+            try {
 
-            setMyCase(data);
+                const caseData = await getCase(id);
+
+                setMyCase(caseData);
+
+            }
+
+            catch (err) {
+
+                console.error(err);
+
+            }
+
+            try {
+
+                const peopleData = await getCasePeople(id);
+
+                setPeople(peopleData);
+
+            }
+
+            catch (err) {
+
+                console.error(err);
+
+                setPeople([]);
+
+            }
+
+            try {
+
+                const evidenceData = await getCaseEvidence(id);
+
+                setEvidence(evidenceData);
+
+            }
+
+            catch (err) {
+
+                console.error(err);
+
+                setEvidence([]);
+
+            }
 
         }
 
-        loadCase();
+        loadCaseData();
 
-    }, []);
+    }, [id]);
 
-    if (!myCase)
+    if (!myCase) {
 
         return <h2>Loading...</h2>;
 
+    }
+
     return (
 
-        <div>
+        <Layout>
 
-            <h1>{myCase.title}</h1>
+            <div className="page">
 
-            <p>
+                <div className="card">
 
-                <b>Case Number:</b>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            marginBottom: "20px"
+                        }}
+                    >
 
-                {myCase.case_number}
+                        <h1>{myCase.title}</h1>
 
-            </p>
+                        <button
+                            onClick={() => navigate(`/cases/edit/${id}`)}
+                        >
+                            Edit Case
+                        </button>
 
-            <p>
+                    </div>
 
-                <b>Status:</b>
+                    <p><strong>Case Number:</strong> {myCase.case_number}</p>
 
-                {myCase.status}
+                    <p><strong>Status:</strong> {myCase.status}</p>
 
-            </p>
+                    <p><strong>Court:</strong> {myCase.court_name}</p>
 
-            <p>
+                    <p><strong>Filing Date:</strong> {myCase.filing_date}</p>
 
-                <b>Court:</b>
+                    <br />
 
-                {myCase.court_name}
+                    <h3>Description</h3>
 
-            </p>
+                    <p>{myCase.description || "No description available."}</p>
 
-            <p>
+                    <br />
 
-                <b>Description:</b>
+                    <h3>Notes</h3>
 
-                {myCase.description}
+                    <p>{myCase.notes || "No notes available."}</p>
 
-            </p>
+                </div>
 
-            <p>
+                <br />
 
-                <b>Notes:</b>
+                <div className="card">
 
-                {myCase.notes}
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            marginBottom: "20px"
+                        }}
+                    >
 
-            </p>
+                        <h2>People Involved</h2>
 
-        </div>
+                        <button
+                            onClick={() => navigate(`/cases/${id}/people/new`)}
+                        >
+                            + Add Person
+                        </button>
+
+                    </div>
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Name</th>
+
+                                <th>Role</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                        {
+                            people.length === 0 ?
+
+                            (
+
+                                <tr>
+
+                                    <td colSpan="2">
+
+                                        No people assigned yet.
+
+                                    </td>
+
+                                </tr>
+
+                            )
+
+                            :
+
+                            people.map(person => (
+
+                                <tr key={person.id}>
+
+                                    <td>{person.name}</td>
+
+                                    <td>{person.role}</td>
+
+                                </tr>
+
+                            ))
+                        }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <br />
+
+                <div className="card">
+
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            marginBottom: "20px"
+                        }}
+                    >
+
+                        <h2>Evidence</h2>
+
+                        <button
+                            onClick={() => navigate(`/cases/${id}/evidence/new`)}
+                        >
+                            + Add Evidence
+                        </button>
+
+                    </div>
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Type</th>
+                                <th>Collected</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        {
+                            evidence.length === 0 ?
+
+                            (
+                                <tr>
+                                    <td colSpan="3">
+                                        No evidence assigned yet.
+                                    </td>
+                                </tr>
+                            )
+
+                            :
+
+                            evidence.map(item => (
+
+                                <tr key={item.id}>
+
+                                    <td>{item.title}</td>
+
+                                    <td>{item.evidence_type}</td>
+
+                                    <td>{item.collected_date || "-"}</td>
+
+                                </tr>
+
+                            ))
+                        }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <br />
+
+                <button
+                    onClick={() => navigate("/cases")}
+                >
+                    ← Back to Cases
+                </button>
+
+            </div>
+
+        </Layout>
 
     );
 

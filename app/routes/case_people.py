@@ -80,3 +80,26 @@ def delete_case_person(case_person_id: int, db: Session = Depends(get_db), user=
     db.delete(case_person)
     db.commit()
     return {"message": "Case-Person link deleted successfully"}
+
+@router.get("/case/{case_id}")
+def get_people_for_case(
+    case_id: int,
+    db: Session = Depends(get_db),
+    user=Depends(auth.get_current_user)
+):
+
+    results = (
+        db.query(CasePerson, Person)
+        .join(Person, CasePerson.person_id == Person.id)
+        .filter(CasePerson.case_id == case_id)
+        .all()
+    )
+
+    return [
+        {
+            "id": person.id,
+            "name": f"{person.first_name} {person.last_name}",
+            "role": case_person.role
+        }
+        for case_person, person in results
+    ]

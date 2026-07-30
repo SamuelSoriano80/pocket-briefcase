@@ -71,3 +71,13 @@ def delete_evidence(evidence_id: int, db: Session = Depends(get_db), user=Depend
     db.delete(evidence)
     db.commit()
     return {"message": "Evidence deleted successfully"}
+
+@router.get("/case/{case_id}", response_model=list[EvidenceOut])
+def get_case_evidence(
+    case_id: int,
+    db: Session = Depends(get_db),
+    user=Depends(auth.get_current_user)
+):
+    return db.query(Evidence).filter(
+        Evidence.case_id == case_id
+    ).all()

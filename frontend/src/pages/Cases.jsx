@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 import { deleteCase } from "../services/caseService";
 
+import Layout from "../components/layout/Layout";
+
 function Cases() {
 
     const [cases, setCases] = useState([]);
@@ -76,94 +78,98 @@ function Cases() {
 
     return (
 
-        <div>
+        <Layout>
 
-            <h1>Cases</h1>
+            <div>
 
-            <button onClick={() => navigate("/cases/new")}>
+                <h1>Cases</h1>
 
-                Create New Case
+                <button onClick={() => navigate("/cases/new")}>
 
-            </button>
+                    Create New Case
 
-            <br />
-            <br />
+                </button>
 
-            <table border="1" cellPadding="10">
+                <br />
+                <br />
 
-                <thead>
+                <table border="1" cellPadding="10">
 
-                    <tr>
+                    <thead>
 
-                        <th>Case Number</th>
+                        <tr>
 
-                        <th>Title</th>
+                            <th>Case Number</th>
 
-                        <th>Status</th>
+                            <th>Title</th>
 
-                        <th>Court</th>
+                            <th>Status</th>
 
-                        <th>Actions</th>
+                            <th>Court</th>
 
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {cases.map((item) => (
+                    
+                    <tr key={item.id}>
+                    
+                    <td>{item.case_number}</td>
+                    
+                    <td>{item.title}</td>
+                    
+                    <td>{item.status}</td>
+                    
+                    <td>{item.court_name}</td>
+                    
+                    <td>
+                    
+                    <button
+                    onClick={() => navigate(`/cases/${item.id}`)}
+                    >
+                    
+                    View
+                    
+                    </button>
+                    
+                    {" "}
+                    
+                    <button
+                    onClick={() => navigate(`/cases/edit/${item.id}`)}
+                    >
+                    
+                    Edit
+                    
+                    </button>
+                    
+                    {" "}
+                    
+                    <button
+                    onClick={() => handleDelete(item.id)}
+                    >
+                    
+                    Delete
+                    
+                    </button>
+                    
+                    </td>
+                    
                     </tr>
 
-                </thead>
+                    ))}
 
-                <tbody>
+                    </tbody>
 
-                {cases.map((item) => (
-                
-                <tr key={item.id}>
-                
-                <td>{item.case_number}</td>
-                
-                <td>{item.title}</td>
-                
-                <td>{item.status}</td>
-                
-                <td>{item.court_name}</td>
-                
-                <td>
-                
-                <button
-                onClick={() => navigate(`/cases/${item.id}`)}
-                >
-                
-                View
-                
-                </button>
-                
-                {" "}
-                
-                <button
-                onClick={() => navigate(`/cases/edit/${item.id}`)}
-                >
-                
-                Edit
-                
-                </button>
-                
-                {" "}
-                
-                <button
-                onClick={() => handleDelete(item.id)}
-                >
-                
-                Delete
-                
-                </button>
-                
-                </td>
-                
-                </tr>
+                </table>
 
-                ))}
+            </div>
 
-                </tbody>
-
-            </table>
-
-        </div>
+        </Layout>
 
     );
 

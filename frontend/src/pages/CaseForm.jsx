@@ -7,6 +7,8 @@ import {
     getCase
 } from "../services/caseService";
 
+import Layout from "../components/layout/Layout";
+
 function CaseForm() {
 
     const navigate = useNavigate();
@@ -106,91 +108,92 @@ function CaseForm() {
 
     return (
 
-        <div>
+        <Layout>
+            <div>
 
-            <h1>
+                <h1>
 
-                {editing ? "Edit Case" : "Create Case"}
+                    {editing ? "Edit Case" : "Create Case"}
 
-            </h1>
+                </h1>
 
-            <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
 
-                <input
-                    name="case_number"
-                    placeholder="Case Number"
-                    value={form.case_number}
-                    onChange={handleChange}
-                    required
-                />
+                    <input
+                        name="case_number"
+                        placeholder="Case Number"
+                        value={form.case_number}
+                        onChange={handleChange}
+                        required
+                    />
 
-                <br /><br />
+                    <br /><br />
 
-                <input
-                    name="title"
-                    placeholder="Title"
-                    value={form.title}
-                    onChange={handleChange}
-                    required
-                />
+                    <input
+                        name="title"
+                        placeholder="Title"
+                        value={form.title}
+                        onChange={handleChange}
+                        required
+                    />
 
-                <br /><br />
+                    <br /><br />
 
-                <textarea
-                    name="description"
-                    placeholder="Description"
-                    value={form.description}
-                    onChange={handleChange}
-                />
+                    <textarea
+                        name="description"
+                        placeholder="Description"
+                        value={form.description}
+                        onChange={handleChange}
+                    />
 
-                <br /><br />
+                    <br /><br />
 
-                <input
-                    name="status"
-                    placeholder="Status"
-                    value={form.status}
-                    onChange={handleChange}
-                />
+                    <input
+                        name="status"
+                        placeholder="Status"
+                        value={form.status}
+                        onChange={handleChange}
+                    />
 
-                <br /><br />
+                    <br /><br />
 
-                <input
-                    name="court_name"
-                    placeholder="Court"
-                    value={form.court_name}
-                    onChange={handleChange}
-                />
+                    <input
+                        name="court_name"
+                        placeholder="Court"
+                        value={form.court_name}
+                        onChange={handleChange}
+                    />
 
-                <br /><br />
+                    <br /><br />
 
-                <input
-                    type="date"
-                    name="filing_date"
-                    value={form.filing_date}
-                    onChange={handleChange}
-                />
+                    <input
+                        type="date"
+                        name="filing_date"
+                        value={form.filing_date}
+                        onChange={handleChange}
+                    />
 
-                <br /><br />
+                    <br /><br />
 
-                <textarea
-                    name="notes"
-                    placeholder="Notes"
-                    value={form.notes}
-                    onChange={handleChange}
-                />
+                    <textarea
+                        name="notes"
+                        placeholder="Notes"
+                        value={form.notes}
+                        onChange={handleChange}
+                    />
 
-                <br /><br />
+                    <br /><br />
 
-                <button type="submit">
+                    <button type="submit">
 
-                    {editing ? "Save Changes" : "Create Case"}
+                        {editing ? "Save Changes" : "Create Case"}
 
-                </button>
+                    </button>
 
-            </form>
+                </form>
 
-        </div>
-
+            </div>
+        </Layout>
     );
 
 }

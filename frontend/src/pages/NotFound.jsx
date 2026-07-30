@@ -1,24 +1,29 @@
 import { Link } from "react-router-dom";
+import Layout from "../components/layout/Layout";
 
 function NotFound() {
 
     return (
 
-        <div>
+        <Layout>
 
-            <h1>404 - Page Not Found</h1>
+            <div>
 
-            <p>
-                The page you are looking for does not exist.
-            </p>
+                <h1>404 - Page Not Found</h1>
 
-            <Link to="/dashboard">
+                <p>
+                    The page you are looking for does not exist.
+                </p>
 
-                Return to Dashboard
+                <Link to="/dashboard">
 
-            </Link>
+                    Return to Dashboard
 
-        </div>
+                </Link>
+
+            </div>
+
+        </Layout>
 
     );
 
