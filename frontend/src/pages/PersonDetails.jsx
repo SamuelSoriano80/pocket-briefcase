@@ -38,7 +38,15 @@ function PersonDetails() {
         setDeleting(true);
         try {
             await deletePerson(id);
-            navigate("/cases");
+            navigate("/cases", {
+                state: {
+                    notification: {
+                        type: "deleted",
+                        message: "Person deleted successfully!",
+                        section: "people"
+                    }
+                }
+            });
         } catch (err) {
             console.error(err);
             setError("Could not delete person.");
@@ -61,7 +69,8 @@ function PersonDetails() {
             <Layout>
                 <div className="page">
                     <p>{error || "Person not found."}</p>
-                    <button onClick={() => navigate("/cases")}>
+                    <button className="cancel-button"
+                        onClick={() => navigate("/cases")}>
                         ← Back to Cases
                     </button>
                 </div>
@@ -84,13 +93,13 @@ function PersonDetails() {
                         <h1>{person.first_name} {person.last_name}</h1>
 
                         <div style={{ display: "flex", gap: "10px" }}>
-                            <button
+                            <button className="edit-button"
                                 onClick={() => navigate(`/people/edit/${id}`)}
                             >
-                                Edit Person
+                                Edit
                             </button>
-                            <button onClick={handleDelete} disabled={deleting}>
-                                {deleting ? "Deleting..." : "Delete Person"}
+                            <button className="delete-button" onClick={handleDelete} disabled={deleting}>
+                                {deleting ? "Deleting..." : "Delete"}
                             </button>
                         </div>
                     </div>
@@ -105,7 +114,8 @@ function PersonDetails() {
                 </div>
                 <br />
 
-                <button onClick={() => navigate("/cases")}>
+                <button className="cancel-button"
+                    onClick={() => navigate("/cases")}>
                     ← Back to Cases
                 </button>
             </div>

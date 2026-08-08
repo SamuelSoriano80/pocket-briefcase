@@ -10,13 +10,9 @@ import {
 import Layout from "../components/layout/Layout";
 
 function CaseForm() {
-
     const navigate = useNavigate();
-
     const { id } = useParams();
-
     const editing = id !== undefined;
-
     const [form, setForm] = useState({
         case_number: "",
         title: "",
@@ -28,14 +24,11 @@ function CaseForm() {
     });
 
     useEffect(() => {
-
         if (!editing)
             return;
 
         async function loadCase() {
-
             try {
-
                 const data = await getCase(id);
 
                 setForm({
@@ -47,155 +40,139 @@ function CaseForm() {
                     filing_date: data.filing_date ?? "",
                     notes: data.notes ?? ""
                 });
-
             }
 
             catch (error) {
-
                 console.error(error);
-
             }
-
         }
 
         loadCase();
-
     }, [editing, id]);
 
     function handleChange(event) {
-
         setForm({
-
             ...form,
-
             [event.target.name]: event.target.value
-
         });
-
     }
 
     async function handleSubmit(event) {
-
         event.preventDefault();
-
         try {
-
             if (editing) {
-
                 await updateCase(id, form);
-
+                navigate("/cases", {
+                    state: {
+                        notification: {
+                            type: "edited",
+                            message: "Case updated successfully!"
+                        }
+                    }
+                });
             }
 
             else {
-
                 await createCase(form);
-
+                navigate("/cases", {
+                    state: {
+                        notification: {
+                            type: "created",
+                            message: "Case created successfully!"
+                        }
+                    }
+                });
             }
-
-            navigate("/cases");
-
         }
 
         catch (error) {
-
             console.error(error);
-
             alert("Could not save the case.");
-
         }
-
     }
 
     return (
-
         <Layout>
             <div>
-
-                <h1>
-
+                <h1 style={{ marginBottom: "20px" }}>
                     {editing ? "Edit Case" : "Create Case"}
-
                 </h1>
-
                 <form onSubmit={handleSubmit}>
 
+                    {/* Case Number */}
+                    <label>Case Number: *</label>
                     <input
                         name="case_number"
-                        placeholder="Case Number"
                         value={form.case_number}
+                        placeholder="e.g. 2026-CR-001"
                         onChange={handleChange}
                         required
                     />
 
-                    <br /><br />
-
+                    {/* Title */}
+                    <label>Title: *</label>
                     <input
                         name="title"
-                        placeholder="Title"
                         value={form.title}
                         onChange={handleChange}
                         required
                     />
 
-                    <br /><br />
-
+                    {/* Description */}
+                    <label>Description:</label>
                     <textarea
                         name="description"
-                        placeholder="Description"
                         value={form.description}
+                        placeholder="Description of the case containing relevant details"
                         onChange={handleChange}
                     />
 
-                    <br /><br />
-
+                    {/* Status */}
+                    <label>Status: *</label>
                     <input
                         name="status"
-                        placeholder="Status"
                         value={form.status}
+                        placeholder="Status"
                         onChange={handleChange}
+                        required
                     />
 
-                    <br /><br />
-
+                    {/* Court */}
+                    <label>Court: *</label>
                     <input
                         name="court_name"
-                        placeholder="Court"
                         value={form.court_name}
+                        placeholder="e.g. Supreme Court"
                         onChange={handleChange}
+                        required
                     />
 
-                    <br /><br />
-
+                    {/* Filing Date */}
+                    <label>Filing Date: *</label>
                     <input
                         type="date"
                         name="filing_date"
                         value={form.filing_date}
                         onChange={handleChange}
+                        required
                     />
 
-                    <br /><br />
-
+                    {/* Notes */}
+                    <label>Notes:</label>
                     <textarea
                         name="notes"
-                        placeholder="Notes"
+                        placeholder="Any additional notes about the case"
                         value={form.notes}
                         onChange={handleChange}
                     />
 
-                    <br /><br />
-
                     <button type="submit">
-
                         {editing ? "Save Changes" : "Create Case"}
-
                     </button>
-
                 </form>
-
             </div>
         </Layout>
     );
-
 }
 
 export default CaseForm;

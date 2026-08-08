@@ -68,10 +68,26 @@ function EvidenceForm() {
         try {
             if (isEditMode) {
                 await updateEvidence(id, formData);
-                navigate(`/evidence/${id}`);
+                navigate(`/cases/${formData.case_id}`, {
+                    state: {
+                        notification: {
+                            type: "edited",
+                            message: "Evidence updated successfully!",
+                            section: "evidence"
+                        }
+                    }
+                });
             } else {
                 const created = await createEvidence(formData);
-                navigate(`/cases/${created.case_id}`);
+                navigate(`/cases/${created.case_id}`, {
+                    state: {
+                        notification: {
+                            type: "created",
+                            message: "Evidence created successfully!",
+                            section: "evidence"
+                        }
+                    }
+                });
             }
         } catch (err) {
             console.error(err);
@@ -94,12 +110,14 @@ function EvidenceForm() {
         <Layout>
             <div className="page">
                 <div className="card">
-                    <h1>{isEditMode ? "Edit Evidence" : "Add Evidence"}</h1>
+                    <h1 style={{ marginBottom: "20px" }}>
+                        {isEditMode ? "Edit Evidence" : "Add Evidence"}
+                    </h1>
 
                     {error && <p>{error}</p>}
 
                     <form onSubmit={handleSubmit}>
-                        <label>Title *</label>
+                        <label>Title: *</label>
                         <input
                             type="text"
                             name="title"
@@ -108,52 +126,55 @@ function EvidenceForm() {
                             required
                         />
 
-                        <label>Description</label>
+                        <label>Description:</label>
                         <textarea
                             name="description"
                             value={formData.description}
+                            placeholder="Description of the evidence"
                             onChange={handleChange}
                         />
 
-                        <label>Evidence Type</label>
+                        <label>Evidence Type: *</label>
                         <input
                             type="text"
                             name="evidence_type"
                             value={formData.evidence_type}
                             onChange={handleChange}
                             placeholder="e.g. document, video, photo"
+                            required
                         />
 
-                        <label>File Path / URL</label>
+                        <label>File Path / URL:</label>
                         <input
                             type="text"
                             name="file_path"
+                            placeholder="e.g. /path/to/file or https://example.com/file"
                             value={formData.file_path}
                             onChange={handleChange}
                         />
 
-                        <label>Collected Date</label>
+                        <label>Collected Date: *</label>
                         <input
                             type="date"
                             name="collected_date"
                             value={formData.collected_date}
                             onChange={handleChange}
+                            required
                         />
 
-                        <label>Notes</label>
+                        <label>Notes:</label>
                         <textarea
                             name="notes"
                             value={formData.notes}
+                            placeholder="Any additional notes about the evidence"
                             onChange={handleChange}
                         />
-
-                        <br />
 
                         <div
                             style={{
                                 display: "flex",
                                 gap: "10px",
-                                marginTop: "20px"
+                                marginTop: "10px"
                             }}
                         >
                             <button type="submit" disabled={saving}>
@@ -162,13 +183,8 @@ function EvidenceForm() {
 
                             <button
                                 type="button"
-                                onClick={() =>
-                                    navigate(
-                                        isEditMode
-                                            ? `/evidence/${id}`
-                                            : `/cases/${caseId}`
-                                    )
-                                }
+                                className="cancel-button"
+                                onClick={() => navigate(`/cases/${formData.case_id || caseId}`)}
                             >
                                 Cancel
                             </button>

@@ -39,7 +39,15 @@ function EvidenceDetails() {
         try {
             const caseId = evidence.case_id;
             await deleteEvidence(id);
-            navigate(`/cases/${caseId}`);
+            navigate(`/cases/${caseId}`, {
+                state: {
+                    notification: {
+                        type: "deleted",
+                        message: "Evidence deleted successfully!",
+                        section: "evidence"
+                    }
+                }
+            });
         } catch (err) {
             console.error(err);
             setError("Could not delete evidence.");
@@ -62,7 +70,8 @@ function EvidenceDetails() {
             <Layout>
                 <div className="page">
                     <p>{error || "Evidence not found."}</p>
-                    <button onClick={() => navigate("/cases")}>
+                    <button className="cancel-button"
+                        onClick={() => navigate("/cases")}>
                         ← Back to Cases
                     </button>
                 </div>
@@ -85,13 +94,13 @@ function EvidenceDetails() {
                         <h1>{evidence.title}</h1>
 
                         <div style={{ display: "flex", gap: "10px" }}>
-                            <button
+                            <button className="edit-button"
                                 onClick={() => navigate(`/evidence/edit/${id}`)}
                             >
-                                Edit Evidence
+                                Edit
                             </button>
-                            <button onClick={handleDelete} disabled={deleting}>
-                                {deleting ? "Deleting..." : "Delete Evidence"}
+                            <button className="delete-button" onClick={handleDelete} disabled={deleting}>
+                                {deleting ? "Deleting..." : "Delete"}
                             </button>
                         </div>
                     </div>
@@ -119,7 +128,8 @@ function EvidenceDetails() {
                 </div>
                 <br />
 
-                <button onClick={() => navigate(`/cases/${evidence.case_id}`)}>
+                <button className="cancel-button"
+                    onClick={() => navigate(`/cases/${evidence.case_id}`)}>
                     ← Back to Case
                 </button>
             </div>

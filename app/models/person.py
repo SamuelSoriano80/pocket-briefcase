@@ -1,5 +1,4 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime
-from sqlalchemy.sql import func
 from app.database import Base
 
 
@@ -13,4 +12,3 @@ class Person(Base):
     email = Column(String(100), nullable=True)
     address = Column(Text, nullable=True)
     notes = Column(Text, nullable=True)
-    created_at = Column(DateTime(timezone=False), server_default=func.now())

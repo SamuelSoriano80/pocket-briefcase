@@ -9,13 +9,24 @@ import {
 
 import Layout from "../components/layout/Layout";
 
+import SearchBar from "../components/SearchBar";
+import Notification from "../components/Notification";
+import { useNotification } from "../hooks/useNotification";
+
+
 function CaseDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
     const [myCase, setMyCase] = useState(null);
     const [people, setPeople] = useState([]);
+    const [displayedPeople, setDisplayedPeople] = useState([]);
 
     const [evidence, setEvidence] = useState([]);
+    const [displayedEvidence, setDisplayedEvidence] = useState([]);
+
+    const [notification] = useNotification();
+    const peopleNotification = notification?.section === "people" ? notification : null;
+    const evidenceNotification = notification?.section === "evidence" ? notification : null;
 
     useEffect(() => {
         async function loadCaseData() {
@@ -30,19 +41,23 @@ function CaseDetails() {
             try {
                 const peopleData = await getCasePeople(id);
                 setPeople(peopleData);
+                setDisplayedPeople(peopleData);
             }
             catch (err) {
                 console.error(err);
                 setPeople([]);
+                setDisplayedPeople([]);
             }
 
             try {
                 const evidenceData = await getCaseEvidence(id);
                 setEvidence(evidenceData);
+                setDisplayedEvidence(evidenceData);
             }
             catch (err) {
                 console.error(err);
                 setEvidence([]);
+                setDisplayedEvidence([]);
             }
         }
         loadCaseData();
@@ -65,7 +80,7 @@ function CaseDetails() {
                         }}
                     >
                         <h1>{myCase.title}</h1>
-                        <button
+                        <button className="edit-button"
                             onClick={() => navigate(`/cases/edit/${id}`)}
                         >
                             Edit Case
@@ -96,13 +111,30 @@ function CaseDetails() {
                             marginBottom: "20px"
                         }}
                     >
-                        <h2>People Involved</h2>
-                        <button
-                            onClick={() => navigate(`/cases/${id}/people/new`)}
-                        >
-                            + Add Person
-                        </button>
+                        <div style={{ flex: 1 }}>
+                            <h2>People Involved</h2>
+                        </div>
+
+                        <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+                            <SearchBar
+                                data={people}
+                                getLabel={(item) => item.name}
+                                onSelect={(item) => setDisplayedPeople([item])}
+                                onReset={() => setDisplayedPeople(people)}
+                                placeholder="Search by name..."
+                            />
+                        </div>
+
+                        <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+                            <button className="add-button"
+                                onClick={() => navigate(`/cases/${id}/people/new`)}
+                            >
+                                + Add Person
+                            </button>
+                        </div>
                     </div>
+
+                    <Notification notification={peopleNotification} />
 
                     <table>
                         <thead>
@@ -113,7 +145,7 @@ function CaseDetails() {
                         </thead>
                         <tbody>
                         {
-                            people.length === 0 ?
+                            displayedPeople.length === 0 ?
                             (
                                 <tr>
                                     <td colSpan="2">
@@ -122,13 +154,9 @@ function CaseDetails() {
                                 </tr>
                             )
                             :
-                            people.map(cp => (
-                                <tr
-                                    key={cp.id}
-                                    onClick={() => navigate(`/people/${cp.person_id}`)}
-                                    style={{ cursor: "pointer" }}
-                                >
-                                    <td>Person #{cp.person_id}</td>
+                            displayedPeople.map(cp => (
+                                <tr key={cp.id}>
+                                    <td>{cp.name}</td>
                                     <td>{cp.role || "-"}</td>
                                 </tr>
                             ))
@@ -147,13 +175,30 @@ function CaseDetails() {
                             marginBottom: "20px"
                         }}
                     >
-                        <h2>Evidence</h2>
-                        <button
-                            onClick={() => navigate(`/cases/${id}/evidence/new`)}
-                        >
-                            + Add Evidence
-                        </button>
+                        <div style={{ flex: 1 }}>
+                            <h2>Evidence</h2>
+                        </div>
+
+                        <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+                            <SearchBar
+                                data={evidence}
+                                getLabel={(item) => item.title}
+                                onSelect={(item) => setDisplayedEvidence([item])}
+                                onReset={() => setDisplayedEvidence(evidence)}
+                                placeholder="Search by title..."
+                            />
+                        </div>
+
+                        <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+                            <button className="add-button"
+                                onClick={() => navigate(`/cases/${id}/evidence/new`)}
+                            >
+                                + Add Evidence
+                            </button>
+                        </div>
                     </div>
+
+                    <Notification notification={evidenceNotification} />
 
                     <table>
                         <thead>
@@ -166,7 +211,7 @@ function CaseDetails() {
 
                         <tbody>
                         {
-                            evidence.length === 0 ?
+                            displayedEvidence.length === 0 ?
                             (
                                 <tr>
                                     <td colSpan="3">
@@ -175,7 +220,7 @@ function CaseDetails() {
                                 </tr>
                             )
                             :
-                            evidence.map(item => (
+                            displayedEvidence.map(item => (
                                 <tr
                                     key={item.id}
                                     onClick={() => navigate(`/evidence/${item.id}`)}
@@ -196,7 +241,7 @@ function CaseDetails() {
 
                     <h2>Case Events</h2>
 
-                    <p>
+                    <p style={{ marginBottom: "20px" }}>
                         Review the history of the case or manage upcoming
                         court events.
                     </p>
@@ -218,7 +263,7 @@ function CaseDetails() {
                 </div>
                 <br />
 
-                <button
+                <button className="cancel-button"
                     onClick={() => navigate("/cases")}
                 >
                     ← Back to Cases

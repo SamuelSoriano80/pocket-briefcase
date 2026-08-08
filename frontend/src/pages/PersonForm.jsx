@@ -70,7 +70,15 @@ function PersonForm() {
         try {
             if (isEditMode) {
                 await updatePerson(id, formData);
-                navigate(`/people/${id}`);
+                navigate(`/cases/${caseId}`, {
+                    state: {
+                        notification: {
+                            type: "edited",
+                            message: "Person updated successfully!",
+                            section: "people"
+                        }
+                    }
+                });
             } else {
                 const createdPerson = await createPerson(formData);
 
@@ -80,7 +88,15 @@ function PersonForm() {
                     role: role || null
                 });
 
-                navigate(`/cases/${caseId}`);
+                navigate(`/cases/${caseId}`, {
+                    state: {
+                        notification: {
+                            type: "created",
+                            message: "Person created successfully!",
+                            section: "people"
+                        }
+                    }
+                });
             }
         } catch (err) {
             console.error(err);
@@ -103,12 +119,14 @@ function PersonForm() {
         <Layout>
             <div className="page">
                 <div className="card">
-                    <h1>{isEditMode ? "Edit Person" : "Add Person"}</h1>
+                    <h1 style={{ marginBottom: "20px" }}>
+                        {isEditMode ? "Edit Person" : "Add Person"}
+                    </h1>
 
                     {error && <p>{error}</p>}
 
                     <form onSubmit={handleSubmit}>
-                        <label>First Name *</label>
+                        <label>First Name: *</label>
                         <input
                             type="text"
                             name="first_name"
@@ -117,7 +135,7 @@ function PersonForm() {
                             required
                         />
 
-                        <label>Last Name *</label>
+                        <label>Last Name: *</label>
                         <input
                             type="text"
                             name="last_name"
@@ -126,39 +144,44 @@ function PersonForm() {
                             required
                         />
 
-                        <label>Phone</label>
+                        <label>Phone:</label>
                         <input
                             type="text"
                             name="phone"
                             value={formData.phone}
+                            placeholder="e.g. +1 234 567 890"
                             onChange={handleChange}
                         />
 
-                        <label>Email</label>
+                        <label>Email:</label>
                         <input
                             type="email"
                             name="email"
                             value={formData.email}
+                            placeholder="e.g. leonard.diggo@example.com"
                             onChange={handleChange}
                         />
 
-                        <label>Address</label>
-                        <textarea
+                        <label>Address:</label>
+                        <input
+                            type="address"
                             name="address"
                             value={formData.address}
+                            placeholder="e.g. 123 Main St, Anytown, USA"
                             onChange={handleChange}
                         />
 
-                        <label>Notes</label>
+                        <label>Notes:</label>
                         <textarea
                             name="notes"
                             value={formData.notes}
+                            placeholder="Any additional notes about the person"
                             onChange={handleChange}
                         />
 
                         {!isEditMode && (
                             <>
-                                <label>Role in this Case *</label>
+                                <label>Role in this Case: *</label>
                                 <input
                                     type="text"
                                     name="role"
@@ -170,13 +193,11 @@ function PersonForm() {
                             </>
                         )}
 
-                        <br />
-
                         <div
                             style={{
                                 display: "flex",
                                 gap: "10px",
-                                marginTop: "20px"
+                                marginTop: "10px"
                             }}
                         >
                             <button type="submit" disabled={saving}>
@@ -185,13 +206,8 @@ function PersonForm() {
 
                             <button
                                 type="button"
-                                onClick={() =>
-                                    navigate(
-                                        isEditMode
-                                            ? `/people/${id}`
-                                            : `/cases/${caseId}`
-                                    )
-                                }
+                                className="cancel-button"
+                                onClick={() => navigate(`/cases/${caseId}`)}
                             >
                                 Cancel
                             </button>
