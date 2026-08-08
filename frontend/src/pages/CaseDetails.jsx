@@ -192,6 +192,32 @@ function CaseDetails() {
                 </div>
                 <br />
 
+                <div className="card">
+
+                    <h2>Case Events</h2>
+
+                    <p>
+                        Review the history of the case or manage upcoming
+                        court events.
+                    </p>
+
+                    <button
+                        onClick={() => navigate(`/cases/${id}/timeline`)}
+                    >
+                        View Case Timeline
+                    </button>
+
+                    {" "}
+
+                    <button
+                        onClick={() => navigate(`/cases/${id}/court-timeline`)}
+                    >
+                        View Court Timeline
+                    </button>
+
+                </div>
+                <br />
+
                 <button
                     onClick={() => navigate("/cases")}
                 >

@@ -7,6 +7,8 @@ from app.routes import case as case_routes
 from app.routes import evidence as evidence_routes
 from app.routes import person as person_routes
 from app.routes import case_people as case_people_routes
+from app.routes import timeline_event as timeline_event_routes
+from app.routes import court_event as court_event_routes
 
 
 Base.metadata.create_all(bind=engine)
@@ -35,3 +37,5 @@ app.include_router(case_routes.router, prefix="/cases", tags=["cases"])
 app.include_router(evidence_routes.router, prefix="/evidence", tags=["evidence"])
 app.include_router(person_routes.router, prefix="/people", tags=["people"])
 app.include_router(case_people_routes.router, prefix="/case_people", tags=["case_people"])
+app.include_router(timeline_event_routes.router, prefix="/timeline-events", tags=["timeline events"])
+app.include_router(court_event_routes.router, prefix="/court-events", tags=["court events"])

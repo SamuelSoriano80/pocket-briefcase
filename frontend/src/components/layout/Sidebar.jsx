@@ -12,9 +12,16 @@ function Sidebar() {
                     isActive ? "nav-link active" : "nav-link"
                 }
             >
-
                 Cases
+            </NavLink>
 
+            <NavLink
+                to="/upcoming-events"
+                className={({ isActive }) =>
+                    isActive ? "nav-link active" : "nav-link"
+                }
+            >
+                Upcoming Events
             </NavLink>
 
         </aside>

@@ -117,7 +117,7 @@ function Cases() {
 
                     {cases.map((item) => (
                     
-                    <tr key={item.id}>
+                    <tr key={item.id} onClick={() => navigate(`/cases/${item.id}`)} style={{ cursor: "pointer" }}>
                     
                     <td>{item.case_number}</td>
                     
@@ -130,17 +130,10 @@ function Cases() {
                     <td>
                     
                     <button
-                    onClick={() => navigate(`/cases/${item.id}`)}
-                    >
-                    
-                    View
-                    
-                    </button>
-                    
-                    {" "}
-                    
-                    <button
-                    onClick={() => navigate(`/cases/edit/${item.id}`)}
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            navigate(`/cases/edit/${item.id}`);
+                        }}
                     >
                     
                     Edit
@@ -150,7 +143,10 @@ function Cases() {
                     {" "}
                     
                     <button
-                    onClick={() => handleDelete(item.id)}
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            handleDelete(item.id);
+                        }}
                     >
                     
                     Delete
