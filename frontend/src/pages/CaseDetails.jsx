@@ -70,7 +70,7 @@ function CaseDetails() {
     return (
         <Layout>
             <div className="page">
-                <div className="card">
+                <div className="card" style={{ marginBottom: "20px" }}>
                     <div
                         style={{
                             display: "flex",
@@ -87,20 +87,42 @@ function CaseDetails() {
                         </button>
                     </div>
 
-                    <p><strong>Case Number:</strong> {myCase.case_number}</p>
-                    <p><strong>Status:</strong> {myCase.status}</p>
-                    <p><strong>Court:</strong> {myCase.court_name}</p>
-                    <p><strong>Filing Date:</strong> {myCase.filing_date}</p>
-                    <br />
+                    <div className="info-grid">
+                        <div className="info-item">
+                            <span className="info-label">Case Number</span>
+                            <span className="info-value">{myCase.case_number}</span>
+                        </div>
 
-                    <h3>Description</h3>
-                    <p>{myCase.description || "No description available."}</p>
-                    <br />
+                        <div className="info-item">
+                            <span className="info-label">Status</span>
+                            <span className={`status-badge status-${myCase.status?.toLowerCase()}`}
+                                style={{ borderRadius: "5px" }}
+                            >
+                                {myCase.status}
+                            </span>
+                        </div>
 
-                    <h3>Notes</h3>
-                    <p>{myCase.notes || "No notes available."}</p>
+                        <div className="info-item">
+                            <span className="info-label">Court</span>
+                            <span className="info-value">{myCase.court_name || "Not specified"}</span>
+                        </div>
+
+                        <div className="info-item">
+                            <span className="info-label">Filing Date</span>
+                            <span className="info-value">{myCase.filing_date || "Not specified"}</span>
+                        </div>
+                    </div>
+
+                    <div className="detail-section">
+                        <h3 className="section-title">Description</h3>
+                        <p className="section-text">{myCase.description || "No description available."}</p>
+                    </div>
+
+                    <div className="detail-section">
+                        <h3 className="section-title">Notes</h3>
+                        <p className="section-text">{myCase.notes || "No notes available."}</p>
+                    </div>
                 </div>
-                <br />
 
                 <div className="card">
                     <div
@@ -155,7 +177,9 @@ function CaseDetails() {
                             )
                             :
                             displayedPeople.map(cp => (
-                                <tr key={cp.id}>
+                                <tr key={cp.id} style={{ cursor: "pointer" }}
+                                    onClick={() => navigate(`/people/${cp.id}?caseId=${id}`)}
+                                >
                                     <td>{cp.name}</td>
                                     <td>{cp.role || "-"}</td>
                                 </tr>

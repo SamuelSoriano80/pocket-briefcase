@@ -82,7 +82,7 @@ function EvidenceDetails() {
     return (
         <Layout>
             <div className="page">
-                <div className="card">
+                <div className="card" style={{ marginBottom: "20px" }}>
                     <div
                         style={{
                             display: "flex",
@@ -94,39 +94,53 @@ function EvidenceDetails() {
                         <h1>{evidence.title}</h1>
 
                         <div style={{ display: "flex", gap: "10px" }}>
-                            <button className="edit-button"
+                            <button
+                                className="edit-button"
                                 onClick={() => navigate(`/evidence/edit/${id}`)}
                             >
-                                Edit
+                                Edit Evidence
                             </button>
                             <button className="delete-button" onClick={handleDelete} disabled={deleting}>
-                                {deleting ? "Deleting..." : "Delete"}
+                                {deleting ? "Deleting..." : "Delete Evidence"}
                             </button>
                         </div>
                     </div>
 
-                    <p><strong>Type:</strong> {evidence.evidence_type || "Not specified"}</p>
-                    <p><strong>Collected Date:</strong> {evidence.collected_date || "Not specified"}</p>
-                    <p>
-                        <strong>File:</strong>{" "}
-                        {evidence.file_path ? (
-                            <a href={evidence.file_path} target="_blank" rel="noreferrer">
-                                {evidence.file_path}
-                            </a>
-                        ) : (
-                            "No file attached"
-                        )}
-                    </p>
-                    <br />
+                    <div className="info-grid">
+                        <div className="info-item">
+                            <span className="info-label">Type</span>
+                            <span className="info-value">{evidence.evidence_type || "Not specified"}</span>
+                        </div>
 
-                    <h3>Description</h3>
-                    <p>{evidence.description || "No description available."}</p>
-                    <br />
+                        <div className="info-item">
+                            <span className="info-label">Collected Date</span>
+                            <span className="info-value">{evidence.collected_date || "Not specified"}</span>
+                        </div>
 
-                    <h3>Notes</h3>
-                    <p>{evidence.notes || "No notes available."}</p>
+                        <div className="info-item">
+                            <span className="info-label">File</span>
+                            <span className="info-value">
+                                {evidence.file_path ? (
+                                    <a href={evidence.file_path} target="_blank" rel="noreferrer">
+                                        {evidence.file_path}
+                                    </a>
+                                ) : (
+                                    "No file attached"
+                                )}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="detail-section">
+                        <h3 className="section-title">Description</h3>
+                        <p className="section-text">{evidence.description || "No description available."}</p>
+                    </div>
+
+                    <div className="detail-section">
+                        <h3 className="section-title">Notes</h3>
+                        <p className="section-text">{evidence.notes || "No notes available."}</p>
+                    </div>
                 </div>
-                <br />
 
                 <button className="cancel-button"
                     onClick={() => navigate(`/cases/${evidence.case_id}`)}>

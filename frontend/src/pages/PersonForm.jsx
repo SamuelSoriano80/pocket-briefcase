@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import {
     getPerson,
@@ -12,9 +12,11 @@ import { createCasePerson } from "../services/casePersonService";
 import Layout from "../components/layout/Layout";
 
 function PersonForm() {
-    const { caseId, id } = useParams();
-    const navigate = useNavigate();
+    const { caseId: caseIdFromRoute, id } = useParams();
+    const [searchParams] = useSearchParams();
+    const caseId = caseIdFromRoute || searchParams.get("caseId");
 
+    const navigate = useNavigate();
     const isEditMode = Boolean(id);
 
     const [formData, setFormData] = useState({

@@ -129,13 +129,17 @@ function CaseForm() {
 
                     {/* Status */}
                     <label>Status: *</label>
-                    <input
+                    <select
                         name="status"
                         value={form.status}
-                        placeholder="Status"
                         onChange={handleChange}
                         required
-                    />
+                    >
+                        <option value="" disabled>Select a status</option>
+                        <option value="Open">Open</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Closed">Closed</option>
+                    </select>
 
                     {/* Court */}
                     <label>Court: *</label>

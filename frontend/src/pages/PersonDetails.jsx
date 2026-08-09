@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import { getPerson, deletePerson } from "../services/personService";
 import Layout from "../components/layout/Layout";
@@ -7,6 +7,8 @@ import Layout from "../components/layout/Layout";
 function PersonDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const caseId = searchParams.get("caseId");
 
     const [person, setPerson] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -38,15 +40,20 @@ function PersonDetails() {
         setDeleting(true);
         try {
             await deletePerson(id);
-            navigate("/cases", {
-                state: {
-                    notification: {
-                        type: "deleted",
-                        message: "Person deleted successfully!",
-                        section: "people"
+
+            if (caseId) {
+                navigate(`/cases/${caseId}`, {
+                    state: {
+                        notification: {
+                            type: "deleted",
+                            message: "Person deleted successfully!",
+                            section: "people"
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                navigate("/cases");
+            }
         } catch (err) {
             console.error(err);
             setError("Could not delete person.");
@@ -81,7 +88,7 @@ function PersonDetails() {
     return (
         <Layout>
             <div className="page">
-                <div className="card">
+                <div className="card" style={{ marginBottom: "20px" }}>
                     <div
                         style={{
                             display: "flex",
@@ -93,30 +100,48 @@ function PersonDetails() {
                         <h1>{person.first_name} {person.last_name}</h1>
 
                         <div style={{ display: "flex", gap: "10px" }}>
-                            <button className="edit-button"
-                                onClick={() => navigate(`/people/edit/${id}`)}
+                            <button
+                                className="edit-button"
+                                onClick={() =>
+                                    navigate(`/people/edit/${id}${caseId ? `?caseId=${caseId}` : ""}`)
+                                }
                             >
-                                Edit
+                                Edit Person
                             </button>
                             <button className="delete-button" onClick={handleDelete} disabled={deleting}>
-                                {deleting ? "Deleting..." : "Delete"}
+                                {deleting ? "Deleting..." : "Delete Person"}
                             </button>
                         </div>
                     </div>
 
-                    <p><strong>Phone:</strong> {person.phone || "Not specified"}</p>
-                    <p><strong>Email:</strong> {person.email || "Not specified"}</p>
-                    <p><strong>Address:</strong> {person.address || "Not specified"}</p>
-                    <br />
+                    <div className="info-grid">
+                        <div className="info-item">
+                            <span className="info-label">Phone</span>
+                            <span className="info-value">{person.phone || "Not specified"}</span>
+                        </div>
 
-                    <h3>Notes</h3>
-                    <p>{person.notes || "No notes available."}</p>
+                        <div className="info-item">
+                            <span className="info-label">Email</span>
+                            <span className="info-value">{person.email || "Not specified"}</span>
+                        </div>
+
+                        <div className="info-item">
+                            <span className="info-label">Address</span>
+                            <span className="info-value">{person.address || "Not specified"}</span>
+                        </div>
+                    </div>
+
+                    <div className="detail-section">
+                        <h3 className="section-title">Notes</h3>
+                        <p className="section-text">{person.notes || "No notes available."}</p>
+                    </div>
                 </div>
-                <br />
 
                 <button className="cancel-button"
-                    onClick={() => navigate("/cases")}>
-                    ← Back to Cases
+                    onClick={() =>
+                        navigate(caseId ? `/cases/${caseId}` : "/cases")
+                    }>
+                    ← Back to {caseId ? "Case" : "Cases"}
                 </button>
             </div>
         </Layout>
